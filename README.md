@@ -12,8 +12,173 @@ A chatbot is a software application that simulates a conversation with a human u
 ●	The knowledge base is stored as a Python dictionary, where every key is an intent (topic) such as courses, eligibility, fees or hostel.
 ●	Each intent stores a list of patterns (keywords/phrases likely to appear in a user's question) and a list of possible responses.
 ●	Organising the data this way makes the chatbot easy to extend — a new admission topic can be added simply by adding one more entry to the dictionary.
-<img width="642" height="222" alt="image" src="https://github.com/user-attachments/assets/146afc71-fa16-4c84-a959-c91bbc2842eb" />
-<img width="618" height="359" alt="image" src="https://github.com/user-attachments/assets/6b976de7-7dce-4418-a526-d25b31c66e79" />
+import re
+
+# ---------------------------------------
+# College Admission Chatbot
+# ---------------------------------------
+
+knowledge_base = {
+    "greeting": {
+        "patterns": ["hi", "hello", "hey", "good morning", "good afternoon"],
+        "responses": [
+            "Hello! Welcome to the College Admission Help Desk. How can I assist you today?"
+        ]
+    },
+
+    "courses": {
+        "patterns": [
+            "course", "courses", "program", "programs",
+            "branch", "department", "specialization"
+        ],
+        "responses": [
+            "We offer B.Tech programs in Information Technology, "
+            "Computer Science, ECE, EEE and Mechanical Engineering, "
+            "along with M.Tech and MBA programs."
+        ]
+    },
+
+    "eligibility": {
+        "patterns": ["eligibility", "qualification", "marks", "criteria"],
+        "responses": [
+            "For B.Tech admission, students should have completed "
+            "12th standard with the required subjects and marks. "
+            "Eligibility may vary depending on the program."
+        ]
+    },
+
+    "fees": {
+        "patterns": ["fee", "fees", "tuition", "cost", "scholarship"],
+        "responses": [
+            "Tuition fees depend on the selected course and admission category. "
+            "Scholarships may be available for eligible students."
+        ]
+    },
+
+    "dates": {
+        "patterns": [
+            "date", "dates", "deadline", "last date",
+            "admission date", "important date"
+        ],
+        "responses": [
+            "Admission dates and deadlines are announced by the college. "
+            "Please check the official admission notification for the latest dates."
+        ]
+    },
+
+    "application_process": {
+        "patterns": [
+            "application", "apply", "application process",
+            "how to apply", "admission process"
+        ],
+        "responses": [
+            "You can apply by filling out the online application form, "
+            "uploading the required documents and paying the application fee."
+        ]
+    },
+
+    "documents": {
+        "patterns": [
+            "document", "documents", "certificate",
+            "required documents", "proof"
+        ],
+        "responses": [
+            "Commonly required documents include 10th and 12th mark sheets, "
+            "transfer certificate, ID proof, passport-size photographs "
+            "and other required certificates."
+        ]
+    },
+
+    "hostel": {
+        "patterns": [
+            "hostel", "accommodation", "room",
+            "hostel facility", "stay"
+        ],
+        "responses": [
+            "Hostel and accommodation facilities are available for students. "
+            "Please contact the admission office for room availability and fees."
+        ]
+    },
+
+    "contact": {
+        "patterns": [
+            "contact", "phone", "email", "address",
+            "admission office", "office"
+        ],
+        "responses": [
+            "For admission-related queries, please contact the college "
+            "admission office through the official college website or phone number."
+        ]
+    },
+
+    "thanks": {
+        "patterns": ["thanks", "thank you", "thank", "thx"],
+        "responses": [
+            "You're welcome! I'm happy to help."
+        ]
+    },
+
+    "goodbye": {
+        "patterns": ["bye", "goodbye", "see you", "exit", "quit"],
+        "responses": [
+            "Thank you for contacting the College Admission Help Desk. Goodbye!"
+        ]
+    }
+}
+
+
+# ---------------------------------------
+# Find chatbot response
+# ---------------------------------------
+
+def get_response(user_input):
+    user_input = user_input.lower().strip()
+
+    for intent, data in knowledge_base.items():
+
+        for pattern in data["patterns"]:
+
+            # Match complete words
+            if re.search(r"\b" + re.escape(pattern) + r"\b", user_input):
+                return data["responses"][0]
+
+    return (
+        "I'm sorry, I did not quite understand that. "
+        "Could you please rephrase your question?\n\n"
+        "I can help with courses, eligibility, fees, application process, "
+        "documents, dates, hostel and contact details."
+    )
+
+
+# ---------------------------------------
+# Start Chatbot
+# ---------------------------------------
+
+def chatbot():
+    print("=" * 60)
+    print("       COLLEGE ADMISSION CHATBOT")
+    print("=" * 60)
+    print("Type 'bye' or 'exit' to close the chatbot.\n")
+
+    while True:
+
+        user_input = input("You: ")
+
+        response = get_response(user_input)
+
+        print("Bot:", response)
+        print()
+
+        if user_input.lower().strip() in ["bye", "goodbye", "exit", "quit"]:
+            break
+
+
+# ---------------------------------------
+# Main Program
+# ---------------------------------------
+
+if __name__ == "__main__":
+    chatbot()
 Knowledge Base Summary
 The table below summarises the complete knowledge base used by the chatbot:
 <img width="669" height="403" alt="image" src="https://github.com/user-attachments/assets/991481a9-e6a3-4ce8-a3d0-2f07c4c7adf2" />
