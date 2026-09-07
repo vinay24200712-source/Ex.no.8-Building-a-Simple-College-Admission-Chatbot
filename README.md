@@ -186,22 +186,74 @@ The table below summarises the complete knowledge base used by the chatbot:
 ●	Converts the user's sentence to lower case so that matching is not case-sensitive.
 ●	re.search() scans the message for each pattern of every intent; the first intent whose pattern is found is returned.
 ●	If no pattern matches any intent, the function returns None so the fallback response can be used.
-<img width="632" height="115" alt="image" src="https://github.com/user-attachments/assets/b4e8db5f-7e9c-4e48-9aeb-82d4c9e43097" />
+import re
+
+def match_intent(user_input):
+    user_input = user_input.lower()
+
+    for intent, data in knowledge_base.items():
+        for pattern in data["patterns"]:
+            if re.search(pattern, user_input):
+                return intent
+
+    return None
 ### Step 4: Define the Chatbot Response Function
 ●	Calls match_intent() to identify what the user is asking about.
 ●	random.choice() picks one response from the matched intent's response list.
 ●	Returns a fallback message when the intent could not be identified, instead of leaving the user without a reply.
-<img width="623" height="95" alt="image" src="https://github.com/user-attachments/assets/ab6895ac-bba4-4e66-9c51-cacf8d828286" />
+def get_response(user_input):
+    intent = match_intent(user_input)
+
+    if intent:
+        return random.choice(knowledge_base[intent]["responses"])
+
+    return random.choice(fallback_responses)
 ### Step 5: Build the Interactive Conversation Loop
 ●	input() continuously reads the user's message from the console.
 ●	get_response() generates the reply for every message typed by the user.
 ●	The loop ends automatically once the matched intent is “goodbye” (e.g. the user types bye / exit / quit).
-<img width="632" height="126" alt="image" src="https://github.com/user-attachments/assets/ae562d77-2461-4bed-b4c1-461b1cea5728" />
+def chatbot():
+    print("College Admission Chatbot (type 'bye' to exit)")
+
+    while True:
+        user_input = input("You: ")
+        response = get_response(user_input)
+
+        print("Bot:", response)
+
+        if match_intent(user_input) == "goodbye":
+            break
+
+
+# Start the chatbot
+if __name__ == "__main__":
+    chatbot()
 ### Step 6: Test the Chatbot with Sample Queries
 ●	A list of realistic sample questions is used to automatically test every intent in the knowledge base.
 ●	Each query and the chatbot's corresponding reply are printed, which makes it easy to verify that every category of question is answered correctly.
-<img width="622" height="113" alt="image" src="https://github.com/user-attachments/assets/4fdb6b4b-c684-4033-94e1-0d51fa19e99b" />
-<img width="583" height="251" alt="image" src="https://github.com/user-attachments/assets/2ba37096-9575-4164-b4c3-ebca74ca9aab" />
+# Step 6: Test the Chatbot with Sample Queries
+
+sample_queries = [
+    "Hi there",
+    "What courses do you offer?",
+    "What is the eligibility criteria for B.Tech?",
+    "How much is the tuition fee?",
+    "How can I apply for admission?",
+    "What documents are required?",
+    "When is the last date to apply?",
+    "Do you provide hostel facility?",
+    "What is your contact number?",
+    "Thank you for the help",
+    "Bye"
+]
+
+print("College Admission Chatbot")
+print("-" * 35)
+
+for query in sample_queries:
+    print(f"You: {query}")
+    print(f"Bot: {get_response(query)}")
+    print("-" * 35)
 ### Step 7: Run the Chatbot
 The complete script is executed in Python. Since input() cannot be used for automated testing, the sample_queries list from Step 6 is run first to validate every intent; the same get_response() function also powers the live chat() loop for real-time conversation with a user. The output produced on running the program is shown below.
 Output
@@ -214,12 +266,3 @@ Output
 <img width="660" height="380" alt="image" src="https://github.com/user-attachments/assets/698ac90d-7962-406c-b381-03d16bedfb3b" />
 ## Conclusion
 Thus, a simple rule-based College Admission Chatbot was successfully designed, implemented and tested using Python. The chatbot uses a keyword/pattern-based knowledge base to identify the intent behind a user's question and responds with an appropriate, pre-defined answer covering courses, eligibility, fees, application process, documents, dates, hostel and contact information. The experiment demonstrates the fundamental building blocks — knowledge base design, intent matching and response generation — on which more advanced NLP-based and AI-based chatbots are built.
-
-
-
-
-
-
-
-
-
