@@ -142,7 +142,7 @@ def get_response(user_input):
             if re.search(r"\b" + re.escape(pattern) + r"\b", user_input):
                 return data["responses"][0]
 
-    return (
+        return (
         "I'm sorry, I did not quite understand that. "
         "Could you please rephrase your question?\n\n"
         "I can help with courses, eligibility, fees, application process, "
